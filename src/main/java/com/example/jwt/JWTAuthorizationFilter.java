@@ -19,7 +19,6 @@ import java.util.ArrayList;
 public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 
     private String secret = "superSecret";
-    int expiration_time = 10 * 60;
     private String token_prefix = "Bearer ";
     private String header_string = "Authorization";
 
@@ -30,12 +29,9 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
 
-
-
         String header = request.getHeader(header_string);
 
         if(header == null || !header.startsWith(token_prefix)) {
-            log.error("OBID ZA AVTORIZACIJA");
             chain.doFilter(request, response);
             return;
         }

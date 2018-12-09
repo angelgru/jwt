@@ -10,6 +10,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -36,14 +37,8 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-        log.error("OBID ZA AVTENTIKACIJA");
         try {
-            log.error(request.getInputStream().toString());
-        } catch (IOException e) {
-            e.printStackTrace();
-            log.error("Request threw error");
-        }
-        try {
+//            https://www.baeldung.com/jackson-object-mapper-tutorial
             User user = new ObjectMapper()
                     .readValue(request.getInputStream(), User.class);
             return authenticationManager.authenticate(
@@ -69,11 +64,6 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 //        We are adding Access-Control-Expose-Headers with value Authorization because
 //        the frontend by default doesn't have access to this header from the response
         response.addHeader("Access-Control-Expose-Headers", "Authorization");
-    }
 
-    @Data
-    class TmpUser {
-        private String username;
-        private String password;
     }
 }
